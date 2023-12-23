@@ -3,10 +3,10 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-src/main/resources/credentials/*
 src/main/resources/cloudinary-configure.yaml
-src/main/resources/*.yaml
-.env
+src/main/resources/application-dev.yaml
+src/main/resources/application-prod.yaml
+*.env
 
 ### STS ###
 .apt_generated
