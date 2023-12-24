@@ -1,5 +1,6 @@
 package team.challenge.MobileStore.model;
 
+import com.github.cloudyrock.mongock.utils.field.Field;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
@@ -25,8 +26,14 @@ public class Catalogue {
     private String id;
 
     /**
+     * catalogueUrlIcon - url of icon for each catalogue group
+     */
+    private String catalogueUrlIcon;
+
+    /**
      * title - unique name of Catalogue group in header
      */
+
 
     @Indexed(unique = true)
     private String title;
