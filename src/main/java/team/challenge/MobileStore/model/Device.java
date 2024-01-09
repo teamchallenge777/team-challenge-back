@@ -9,8 +9,10 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import team.challenge.MobileStore.dto.DevicePresentation;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 /**
@@ -20,7 +22,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Device {
+public class
+Device {
 
 
     /**
@@ -83,11 +86,14 @@ public class Device {
     @DocumentReference
     private List<Question> questions;
 
+    private LocalDateTime creatingDate;
+    private Boolean isLeader;
+
     public String getSpecificationValue(String specificationTitle){
         List<Specification> specifications = new ArrayList<>();
         for (SpecificationGroup group: this.specificationGroups){
             specifications.addAll(group.getSpecifications());
         }
-        return specifications.stream().filter(specification -> specification.getTitle().equals(specificationTitle)).map(Specification::getValue).toString();
+        return specifications.stream().filter(specification -> specification.getTitle().equals(specificationTitle)).map(Specification::getValue).collect(Collectors.joining());
     }
 }

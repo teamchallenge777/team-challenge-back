@@ -10,10 +10,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import team.challenge.MobileStore.dto.DeviceDtoFull;
 import team.challenge.MobileStore.dto.DeviceDtoShort;
+import team.challenge.MobileStore.dto.DeviceGroupDto;
 import team.challenge.MobileStore.exception.ApiError;
 import team.challenge.MobileStore.mapper.DeviceMapper;
 import team.challenge.MobileStore.service.DeviceService;
@@ -26,7 +29,7 @@ import java.util.Map;
  */
 @Tag(name = "Device endpoints", description = "HTTP device methods")
 @RestController
-@RequestMapping("/api/v1/devises")
+@RequestMapping("/api/v1/devices")
 @RequiredArgsConstructor
 public class DeviceController {
 
@@ -62,13 +65,13 @@ public class DeviceController {
 
 
     @GetMapping()
-    public List<DeviceDtoShort> getAll(
+    public Page<DeviceDtoShort> getAll(
             @RequestParam
                     @Parameter(name = "params", examples = {@ExampleObject(name = "Map desc", value = "'key': 'value'", description = "Map structure."),
                     @ExampleObject(name = "Params example" , value = """
-                            'catalogue': 'smartphones'
-                            'brand': 'apple'
-                            'series': 'iphone 14 pro'""",
+                            'catalogue': 'catalogueId'
+                            'brand': 'brandId'
+                            'series': 'series value'""",
                     description = "Example with parameters.")},
                     description = "Parameters that are necessary for the operation of the catalog and filters for obtaining the desired list of devices. " +
                             "If you do not specify the parameters, you will receive all the devices that are in the database.",
@@ -76,7 +79,7 @@ public class DeviceController {
                     )
             Map<String, String> param)
             {
-                return deviceMapper.mapToDeviceShortDtoList(deviceService.getAll(param));
+                return deviceMapper.mapToDeviceDtoShortPage(deviceService.getAll(param));
 
     }
 
@@ -98,9 +101,23 @@ public class DeviceController {
                                     schema = @Schema(implementation = ApiError.class))
                     })
     })
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<?> deleteDeviceById(@PathVariable String id) {
         deviceService.delete(id);
         return ResponseEntity.noContent().build();
+    }
+    @Operation(summary = "Get device list for main page.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+                    description = "Get grouped list of devices",
+                    content = {
+                            @Content(mediaType = "application/json",
+                                    schema = @Schema(implementation = DeviceGroupDto.class))
+                    })
+    })
+    @GetMapping("/main-page")
+    public List<DeviceGroupDto> geDevicesForMainPage(){
+        return deviceMapper.mapToDeviceList(deviceService.getGroupedDevices());
     }
 
 //    /**

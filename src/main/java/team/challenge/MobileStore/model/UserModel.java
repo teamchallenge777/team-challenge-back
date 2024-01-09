@@ -5,6 +5,7 @@ import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.DocumentReference;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -29,6 +30,7 @@ public class UserModel implements UserDetails, OAuth2User {
     private String email;
     private String phoneNumber;
     private String password;
+    @DocumentReference
     private Set<RoleModel> roles;
     private AuthProvider provider;
     private String customer;
