@@ -10,6 +10,7 @@ import team.challenge.MobileStore.dto.LoginRequest;
 import team.challenge.MobileStore.dto.SignUpRequest;
 import team.challenge.MobileStore.dto.UserInfoRequest;
 import team.challenge.MobileStore.exception.AuthException;
+import team.challenge.MobileStore.exception.ModelAlreadyExistException;
 import team.challenge.MobileStore.exception.ModelNotFoundException;
 import team.challenge.MobileStore.model.AuthProvider;
 import team.challenge.MobileStore.model.RoleModel;
@@ -58,8 +59,10 @@ public class UserServiceImpl implements UserService  {
          */
         try{
             getOneByEmail(userRequest.email());
+            throw new ModelAlreadyExistException("User with present email is already exist");
         } catch (ModelNotFoundException e){
-            RoleModel roleUser = roleRepository.findByRoleName("USER").orElse(roleRepository.save(new RoleModel("ROLE")));
+            RoleModel roleUser = roleRepository.findByRoleName("USER").orElse(new RoleModel("USER"));
+            roleUser = roleRepository.save(roleUser);
             String hash = passwordEncoder.encode(userRequest.password());
             UserModel newUser = UserModel.builder()
                     .phoneNumber(userRequest.phoneNumber())
@@ -68,9 +71,8 @@ public class UserServiceImpl implements UserService  {
                     .provider(AuthProvider.local)
                     .roles(Collections.singleton(roleUser))
                     .build();
+            return userRepository.save(newUser);
         }
-
-        return null;
     }
 
     @Override
@@ -93,8 +95,8 @@ public class UserServiceImpl implements UserService  {
         } else {
             throw new AuthException("Invalid username!");
         }
-//        if (passwordEncoder.matches(loginRequest.password(), currentUser.getPassword())){
-        if (true){
+        if (passwordEncoder.matches(loginRequest.password(), currentUser.getPassword())){
+//        if (true){
             return loadUserByUsername(currentUser.getUsername());
         } else{
             throw new AuthException("Invalid password!");
