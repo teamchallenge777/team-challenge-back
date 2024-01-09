@@ -9,6 +9,7 @@ public record DeviceDtoFull(
         String id,
         String title,
         Integer price,
+        Integer discount,
         List<SameDeviceDto> sameDevices,
         List<SameDeviceDto> sameMemories,
         List<String> photoUris,

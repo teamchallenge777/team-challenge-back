@@ -2,6 +2,9 @@ package team.challenge.MobileStore.repositories.impl;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
@@ -14,7 +17,10 @@ import java.util.List;
 public class DeviceCriteriaRepositoryImpl implements DeviceCriteriaRepository {
     private final MongoTemplate template;
     @Override
-    public List<Device> findAll(@NonNull Query query) {
-        return template.find(query, Device.class);
+    public Page<Device> findAll(@NonNull Query query, Pageable pageable) {
+        List<Device> devices = template.find(query, Device.class);
+        long count = template.count(query, Device.class);
+
+        return new PageImpl<>(devices, pageable, count);
     }
 }

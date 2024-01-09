@@ -64,11 +64,6 @@ public class SecurityConfig {
         return source;
     }
 
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer(){
-        return web -> web.ignoring().requestMatchers("/swagger-ui/**", "/v3/api-docs/**");
-    }
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
@@ -86,14 +81,25 @@ public class SecurityConfig {
                 .authorizeHttpRequests(request ->
                                 request.requestMatchers(
                                         HttpMethod.GET,
-                                        "/api/v1/devises",
+                                        "/api/v1/devices",
+                                        "/api/v1/devices/one/**",
+                                        "/api/v1/devices/main-page",
                                         "/api/v1/brands",
-                                        "api/v1/catalogue",
+                                        "/api/v1/brands/**",
+                                        "/api/v1/catalogue",
+                                        "/api/v1/catalogue/**",
                                         "/api/v1/question",
-                                        "/api/v1/reviews"
+                                        "/api/v1/question/**",
+                                        "/api/v1/reviews",
+                                        "/api/v1/reviews/**"
                                 ).permitAll()
                                 .requestMatchers(
-                                        "/auth/**", "/oauth2/**")
+                                        "/auth/**")
+                                .permitAll()
+                                .requestMatchers(
+                                        "/swagger-ui/**",
+                                        "/v3/api-docs/**"
+                                        )
                                 .permitAll()
                                 .anyRequest().authenticated()
                 )
