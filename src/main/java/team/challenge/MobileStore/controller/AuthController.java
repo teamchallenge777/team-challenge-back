@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import team.challenge.MobileStore.dto.LoginRequest;
 import team.challenge.MobileStore.dto.SignUpRequest;
+import team.challenge.MobileStore.dto.UserTokenInfo;
 import team.challenge.MobileStore.model.UserModel;
 import team.challenge.MobileStore.security.TokenProvider;
 import team.challenge.MobileStore.service.UserService;
@@ -34,9 +35,10 @@ public class AuthController {
                         login.password()
                 )
         );
+        UserModel user = userService.getOneByEmail(login.username());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = tokenProvider.createToken(authentication);
-        return ResponseEntity.ok(token);
+        return ResponseEntity.ok(new UserTokenInfo(token, user.getId(), user.getEmail(), user.getRoles()));
     }
     @PostMapping("/signup")
     public ResponseEntity<?> create(@RequestBody SignUpRequest signUpRequest){
