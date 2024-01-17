@@ -7,15 +7,12 @@ import jakarta.validation.constraints.Size;
 
 public record LoginRequest(
         @NotBlank(message = "Email must not be blank!")
-        @NotEmpty(message = "Email must not be empty!")
-        @Pattern(regexp = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$",
+        @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9._%+-]{3,}$*@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$",
                 message = "Must be a valid e-mail address!")
-        @Size(min = 11)
         String email,
         @NotBlank(message = "Password must not be blank!")
-        @NotEmpty(message = "Password must not be empty!")
-        @Pattern(regexp = "[A-Za-z\\d]{6,}",
-                message = "Must be minimum 6 symbols long, using digits and latin letters!")
+        @Pattern(regexp = ".*[!@#$%^&*()_+\\-=].*",
+                message = "Must contain at least one special symbol ( !@#$%^&*()_+-= )!")
         @Pattern(regexp = ".*\\d.*",
                 message = "Must contain at least one digit!")
         @Pattern(regexp = ".*[A-Z].*",

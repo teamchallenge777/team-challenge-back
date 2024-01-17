@@ -38,7 +38,7 @@ public class AuthController {
                         login.password()
                 )
         );
-        UserModel user = userService.getOneByEmail(login.email());
+        UserModel user = userService.getOneByEmailAndPassword(login);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = tokenProvider.createToken(authentication);
         return ResponseEntity.ok(new UserTokenInfo(token, user.getId(), user.getEmail(), roleMapper.mapToDtoSet(user.getRoles())));
