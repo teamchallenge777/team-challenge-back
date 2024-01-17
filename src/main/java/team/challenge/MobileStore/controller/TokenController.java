@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import team.challenge.MobileStore.dto.PasswordResetRequest;
 import team.challenge.MobileStore.model.UserModel;
 import team.challenge.MobileStore.model.VerificationToken;
+import team.challenge.MobileStore.service.MailSenderService;
 import team.challenge.MobileStore.service.PasswordVerificationTokenService;
 import team.challenge.MobileStore.service.UserService;
 import team.challenge.MobileStore.service.EmailVerificationTokenService;
@@ -22,8 +23,8 @@ import team.challenge.MobileStore.service.EmailVerificationTokenService;
 public class TokenController {
     private final UserService userService;
     private final EmailVerificationTokenService emailVerificationTokenService;
-    private final JavaMailSender javaMailSender;
     private final PasswordVerificationTokenService passwordVerificationTokenService;
+    private final MailSenderService mailSenderService;
 
     @PostMapping("/mail/create")
     @PreAuthorize("authentication.principal.username == #email")
@@ -32,13 +33,8 @@ public class TokenController {
         VerificationToken token = emailVerificationTokenService.createToken(user);
         String verifyToken = token.getToken() + "+" + user.getId();
         String message = "To verify your email go to https://electronic-heaven.netlify.app/verify-email?token=" + verifyToken;
-        String subject = "Token verification";
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo(email);
-        simpleMailMessage.setSubject(subject);
-        simpleMailMessage.setText(message);
-        javaMailSender.send(simpleMailMessage);
-
+        String subject = "Email verification";
+        mailSenderService.sendSimpleMessage(email, subject, message);
         return ResponseEntity.ok("To verify your email go to https://electronic-heaven.netlify.app/verify-email?token=" + verifyToken);
     }
     @PostMapping("/mail/verify")
@@ -54,14 +50,9 @@ public class TokenController {
         UserModel user = userService.getOneByEmail(email);
         VerificationToken token = passwordVerificationTokenService.createToken(user);
         String verifyToken = token.getToken() + "+" + user.getId();
-        String message = "To verify your email go to https://electronic-heaven.netlify.app/password-reset?token=" + verifyToken;
-        String subject = "Token verification";
-        SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-        simpleMailMessage.setTo(email);
-        simpleMailMessage.setSubject(subject);
-        simpleMailMessage.setText(message);
-        javaMailSender.send(simpleMailMessage);
-
+        String message = "To reset your password go to https://electronic-heaven.netlify.app/password-reset?token=" + verifyToken;
+        String subject = "Password reset";
+        mailSenderService.sendSimpleMessage(email, subject, message);
         return ResponseEntity.ok("To verify your email go to https://electronic-heaven.netlify.app/password-reset?token=" + verifyToken);
     }
     @PostMapping("/password/verify")
