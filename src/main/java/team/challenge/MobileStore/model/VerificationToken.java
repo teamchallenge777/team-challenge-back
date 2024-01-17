@@ -21,6 +21,7 @@ public class VerificationToken {
     @DocumentReference
     private UserModel user;
     private Date expiryDate;
+    private VerificationTokenType tokenType;
 
     public VerificationToken(UserModel user){
         this.user = user;

@@ -6,15 +6,16 @@ import team.challenge.MobileStore.exception.ModelNotFoundException;
 import team.challenge.MobileStore.exception.EmailVerifiedException;
 import team.challenge.MobileStore.model.UserModel;
 import team.challenge.MobileStore.model.VerificationToken;
+import team.challenge.MobileStore.model.VerificationTokenType;
 import team.challenge.MobileStore.repositories.UserRepository;
 import team.challenge.MobileStore.repositories.VerificationTokenRepository;
-import team.challenge.MobileStore.service.VerificationTokenService;
+import team.challenge.MobileStore.service.EmailVerificationTokenService;
 
 import java.util.Calendar;
 
 @Service
 @RequiredArgsConstructor
-public class VerificationTokenServiceImpl implements VerificationTokenService {
+public class EmailVerificationTokenServiceImpl implements EmailVerificationTokenService {
     private final VerificationTokenRepository tokenRepository;
     private final UserRepository userRepository;
     @Override
@@ -26,9 +27,11 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
             VerificationToken byUser = getByUser(user);
             tokenRepository.delete(byUser);
             VerificationToken token = new VerificationToken(user);
+            token.setTokenType(VerificationTokenType.EMAIL);
             return tokenRepository.save(token);
         } catch (ModelNotFoundException e){
             VerificationToken token = new VerificationToken(user);
+            token.setTokenType(VerificationTokenType.EMAIL);
             return tokenRepository.save(token);
         }
 
@@ -39,7 +42,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
         VerificationToken verificationToken = getByTokenValue(token);
         UserModel user = verificationToken.getUser();
         Calendar now = Calendar.getInstance();
-        if (verificationToken.getExpiryDate().getTime() - now.getTime().getTime() >= 0 && user.getId().equals(userId)) {
+        if (verificationToken.getExpiryDate().getTime() - now.getTime().getTime() >= 0 && user.getId().equals(userId) && verificationToken.getTokenType().equals(VerificationTokenType.EMAIL)) {
             user.setEmailConfirmed(true);
             userRepository.save(user);
             tokenRepository.delete(verificationToken);
