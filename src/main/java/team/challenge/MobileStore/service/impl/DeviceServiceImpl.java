@@ -14,6 +14,8 @@ import team.challenge.MobileStore.exception.ModelNotFoundException;
 import team.challenge.MobileStore.model.*;
 import team.challenge.MobileStore.repositories.DeviceCriteriaRepository;
 import team.challenge.MobileStore.repositories.DeviceRepository;
+import team.challenge.MobileStore.service.BrandService;
+import team.challenge.MobileStore.service.CatalogueService;
 import team.challenge.MobileStore.service.DeviceService;
 
 import java.util.*;
@@ -21,7 +23,6 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class DeviceServiceImpl implements DeviceService {
-
     private static final String CATALOGUE = "catalogue";
     private static final String BRAND = "brand";
     private static final String PRICE = "price";
@@ -29,6 +30,8 @@ public class DeviceServiceImpl implements DeviceService {
     private static final String SPECIFICATION = "specificationGroups.specifications";
     private final DeviceRepository deviceRepository;
     private final DeviceCriteriaRepository deviceCriteriaRepository;
+    private final BrandService brandService;
+    private final CatalogueService catalogueService;
     @Override
     public Page<Device> getAll(Map<String, String> params) {
         int page = 1;
@@ -105,16 +108,14 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public List<Device> getAllWithSameColor(@NonNull String deviceId, @NonNull String color) {
-        String deviceSeries = getOne(deviceId).getSpecificationValue("series");
-        return deviceRepository.getAllBySeriesAndColor(deviceSeries, color)
-                .stream().filter(device -> !device.getId().equals(deviceId)).toList();
+        String deviceSeries = getOne(deviceId).getSpecificationValue("Series");
+        return deviceRepository.getAllBySeriesAndColor(deviceSeries, color).stream().filter(device -> !device.getId().equals(deviceId)).toList();
     }
 
     @Override
     public List<Device> getAllWithSameMemory(@NonNull String deviceId, @NonNull String internalMemory) {
-        String deviceSeries = getOne(deviceId).getSpecificationValue("series");
-        return deviceRepository.getAllBySeriesAndInternalMemory(deviceSeries, internalMemory)
-                .stream().filter(device -> !device.getId().equals(deviceId)).toList();
+        String deviceSeries = getOne(deviceId).getSpecificationValue("Series");
+        return deviceRepository.getAllBySeriesAndInternalMemory(deviceSeries, internalMemory).stream().filter(device -> !device.getId().equals(deviceId)).toList();
     }
 
     @Override
@@ -176,7 +177,7 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public Map<String, List<Device>> getGroupedDevices() {
+    public Map<String , List<Device>>  getGroupedDevices() {
         Map<String, List<Device>> resultMap = new HashMap<>();
         List<Device> bestPrices = deviceRepository.findAll(Sort.by(Sort.Order.desc("discount")))
                 .stream()

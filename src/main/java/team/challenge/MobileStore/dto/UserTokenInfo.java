@@ -8,6 +8,6 @@ public record UserTokenInfo(
         String token,
         String userId,
         String userEmail,
-        Set<RoleModel> roles
+        Set<RoleDto> roles
 ) {
 }

@@ -14,6 +14,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import team.challenge.MobileStore.dto.LoginRequest;
 import team.challenge.MobileStore.dto.SignUpRequest;
 import team.challenge.MobileStore.dto.UserTokenInfo;
+import team.challenge.MobileStore.mapper.RoleMapper;
 import team.challenge.MobileStore.model.UserModel;
 import team.challenge.MobileStore.security.TokenProvider;
 import team.challenge.MobileStore.service.UserService;
@@ -27,6 +28,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final TokenProvider tokenProvider;
     private final UserService userService;
+    private final RoleMapper roleMapper;
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest login){
         Authentication authentication = authenticationManager.authenticate(
@@ -38,7 +40,7 @@ public class AuthController {
         UserModel user = userService.getOneByEmail(login.username());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = tokenProvider.createToken(authentication);
-        return ResponseEntity.ok(new UserTokenInfo(token, user.getId(), user.getEmail(), user.getRoles()));
+        return ResponseEntity.ok(new UserTokenInfo(token, user.getId(), user.getEmail(), roleMapper.mapToDtoSet(user.getRoles())));
     }
     @PostMapping("/signup")
     public ResponseEntity<?> create(@RequestBody SignUpRequest signUpRequest){
