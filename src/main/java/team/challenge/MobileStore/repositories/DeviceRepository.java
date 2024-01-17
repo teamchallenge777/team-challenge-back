@@ -9,11 +9,11 @@ import java.util.List;
 
 @Repository
 public interface DeviceRepository extends MongoRepository<Device, String> {
-    @Query("{$and: [{'specificationGroups.specifications': {$elemMatch:  {'title': 'series', 'value': ?0}}}, {'specificationGroups.specifications': {$elemMatch:  {'title': 'internalMemory', 'value': ?1}}}]}")
+    @Query("{$and: [{'specificationGroups.specifications': {$elemMatch:  {'title': 'Series', 'value': ?0}}}, {'specificationGroups.specifications': {$elemMatch:  {'title': 'Internal memory', 'value': ?1}}}]}")
     List<Device> getAllBySeriesAndInternalMemory(String series, String internalMemory);
-    @Query("{$and: [{'specificationGroups.specifications': {$elemMatch:  {'title': 'series', 'value': ?0}}}, {'specificationGroups.specifications': {$elemMatch:  {'title': 'color', 'value': ?1}}}]}")
+    @Query("{$and: [{'specificationGroups.specifications': {$elemMatch:  {'title': 'Series', 'value': ?0}}}, {'specificationGroups.specifications': {$elemMatch:  {'title': 'Color', 'value': ?1}}}]}")
     List<Device> getAllBySeriesAndColor(String series, String color);
-    @Query("{'specificationGroups.specifications': {$elemMatch:  {'title': 'series', 'value': ?0}}}")
+    @Query("{'specificationGroups.specifications': {$elemMath:  {'title': 'series', 'value': ?0}}}")
     List<Device> getAllBySeries(String series);
 
     List<Device> findAllByCatalogueAndBrand(Catalogue catalog, Brand brand);
