@@ -20,8 +20,14 @@ public class GlobalExceptionHandler {
         logger.error("Handle ModelAlreadyExistException. Message = {}", e.getMessage());
         return new ResponseEntity<>(new ApiError(e.getMessage()), HttpStatus.BAD_REQUEST);
     }
-
     @ExceptionHandler
+    public ResponseEntity<ApiError> handleUserIsAlreadyVerifiedException(EmailVerifiedException e) {
+        logger.error("Handle EmailVerifiedException. Message = {}", e.getMessage());
+        return new ResponseEntity<>(new ApiError(e.getMessage()), HttpStatus.BAD_REQUEST);
+    }
+
+
+        @ExceptionHandler
     public ResponseEntity<ApiError> handleModelNotFoundException(ModelNotFoundException e){
         logger.error("Handle ModelNotFoundException. Message = {}", e.getMessage());
         return new ResponseEntity<>(new ApiError(e.getMessage()), HttpStatus.NOT_FOUND);

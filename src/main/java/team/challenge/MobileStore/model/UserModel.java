@@ -71,7 +71,8 @@ public class UserModel implements UserDetails, OAuth2User {
 
     @Override
     public boolean isEnabled() {
-        return isEmailConfirmed || isPhoneNumberConfirmed;
+//        return isEmailConfirmed || isPhoneNumberConfirmed;
+        return true;
     }
 
     @Override

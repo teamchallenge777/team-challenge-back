@@ -9,7 +9,8 @@ public record LoginRequest(
         @NotBlank(message = "Email must not be blank!")
         @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9._%+-]{3,}$*@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$",
                 message = "Must be a valid e-mail address!")
-        String email,
+        String username,
+
         @NotBlank(message = "Password must not be blank!")
         @Pattern(regexp = ".*[!@#$%^&*()_+\\-=].*",
                 message = "Must contain at least one special symbol ( !@#$%^&*()_+-= )!")
