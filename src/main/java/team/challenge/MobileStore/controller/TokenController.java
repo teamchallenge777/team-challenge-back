@@ -1,5 +1,8 @@
 package team.challenge.MobileStore.controller;
 
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.SimpleMailMessage;
@@ -16,7 +19,7 @@ import team.challenge.MobileStore.service.MailSenderService;
 import team.challenge.MobileStore.service.PasswordVerificationTokenService;
 import team.challenge.MobileStore.service.UserService;
 import team.challenge.MobileStore.service.EmailVerificationTokenService;
-
+@Tag(name = "Token endpoints", description = "HTTP methods for creating email verification and password reset tokens and verify them.")
 @RestController
 @RequestMapping("/api/v1/token")
 @RequiredArgsConstructor
@@ -28,6 +31,10 @@ public class TokenController {
 
     @PostMapping("/mail/create")
     @PreAuthorize("authentication.principal.username == #email")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200",
+            description = "Create email verification token.")
+    })
     public ResponseEntity<?> createEmailToken(@RequestBody String email){
         UserModel user = userService.getOneByEmail(email);
         VerificationToken token = emailVerificationTokenService.createToken(user);
