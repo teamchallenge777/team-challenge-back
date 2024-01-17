@@ -57,6 +57,7 @@ public class TokenController {
     }
     @PostMapping("/password/verify")
     public ResponseEntity<?> resetPassword(@RequestBody PasswordResetRequest passwordResetRequest){
-        return ResponseEntity.ok(passwordVerificationTokenService.verifyToken(passwordResetRequest));
+        String[] tokenPlusId = passwordResetRequest.token().split("\\+");
+        return ResponseEntity.ok(passwordVerificationTokenService.verifyToken(tokenPlusId[0], tokenPlusId[1], passwordResetRequest.password()));
     }
 }

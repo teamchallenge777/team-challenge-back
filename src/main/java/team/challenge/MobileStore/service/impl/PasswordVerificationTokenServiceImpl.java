@@ -37,15 +37,15 @@ public class PasswordVerificationTokenServiceImpl implements PasswordVerificatio
     }
 
     @Override
-    public String verifyToken(PasswordResetRequest passwordResetRequest) {
-        VerificationToken verificationToken = getByTokenValue(passwordResetRequest.token());
+    public String verifyToken(String token, String userId, String newPassword) {
+        VerificationToken verificationToken = getByTokenValue(token);
         UserModel user = verificationToken.getUser();
         Calendar now = Calendar.getInstance();
-        if (passwordEncoder.matches(passwordResetRequest.password(), user.getPassword())) {
+        if (passwordEncoder.matches(newPassword, user.getPassword())) {
             return "New password cannot be same with old!";
         }
-        if (verificationToken.getExpiryDate().getTime() - now.getTime().getTime() >= 0 && user.getId().equals(passwordResetRequest.userId()) && verificationToken.getTokenType().equals(VerificationTokenType.PASSWORD)) {
-            String hash = passwordEncoder.encode(passwordResetRequest.password());
+        if (verificationToken.getExpiryDate().getTime() - now.getTime().getTime() >= 0 && user.getId().equals(userId) && verificationToken.getTokenType().equals(VerificationTokenType.PASSWORD)) {
+            String hash = passwordEncoder.encode(newPassword);
             user.setPassword(hash);
             userRepository.save(user);
             tokenRepository.delete(verificationToken);

@@ -6,7 +6,7 @@ import team.challenge.MobileStore.model.VerificationToken;
 
 public interface PasswordVerificationTokenService {
     VerificationToken createToken(UserModel user);
-    String verifyToken(PasswordResetRequest passwordResetRequest);
+    String verifyToken(String token, String userId, String newPassword);
     VerificationToken getByTokenValue(String token);
     VerificationToken getByUser(UserModel user);
 }

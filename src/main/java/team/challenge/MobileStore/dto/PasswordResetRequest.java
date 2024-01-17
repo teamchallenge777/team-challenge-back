@@ -7,8 +7,6 @@ import jakarta.validation.constraints.Size;
 public record PasswordResetRequest(
         String token,
 
-        String userId,
-
         @NotBlank(message = "Password must not be blank!")
         @Pattern(regexp = ".*[!@#$%^&*()_+\\-=].*",
                 message = "Must contain at least one special symbol ( !@#$%^&*()_+-= )!")
