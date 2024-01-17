@@ -1,5 +1,6 @@
 package team.challenge.MobileStore.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,20 +31,20 @@ public class AuthController {
     private final UserService userService;
     private final RoleMapper roleMapper;
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest login){
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest login){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        login.username(),
+                        login.email(),
                         login.password()
                 )
         );
-        UserModel user = userService.getOneByEmail(login.username());
+        UserModel user = userService.getOneByEmailAndPassword(login);
         SecurityContextHolder.getContext().setAuthentication(authentication);
         String token = tokenProvider.createToken(authentication);
         return ResponseEntity.ok(new UserTokenInfo(token, user.getId(), user.getEmail(), roleMapper.mapToDtoSet(user.getRoles())));
     }
     @PostMapping("/signup")
-    public ResponseEntity<?> create(@RequestBody SignUpRequest signUpRequest){
+    public ResponseEntity<?> create(@Valid @RequestBody SignUpRequest signUpRequest){
         UserModel user = userService.create(signUpRequest);
         URI location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

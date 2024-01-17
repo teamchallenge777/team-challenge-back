@@ -18,6 +18,6 @@ public interface UserService  extends UserDetailsService {
     UserModel create(@NonNull final SignUpRequest userRequest);
     UserModel update(@NonNull final UserInfoRequest userRequest);
     void delete(@NonNull final String id);
-    UserDetails getOneByEmailAndPassword(@NonNull final LoginRequest loginRequest);
+    UserModel getOneByEmailAndPassword(@NonNull final LoginRequest loginRequest);
 
 }

@@ -86,18 +86,15 @@ public class UserServiceImpl implements UserService  {
     }
 
     @Override
-    public UserDetails getOneByEmailAndPassword(@NonNull LoginRequest loginRequest) {
+    public UserModel getOneByEmailAndPassword(@NonNull LoginRequest loginRequest) {
         UserModel currentUser;
-        if (StringUtil.isValidEmail(loginRequest.username())){
-            currentUser = getOneByEmail(loginRequest.username());
-        } else if (StringUtil.isValidPhoneNumber(loginRequest.username())){
-            currentUser = getOneByPhoneNumber(loginRequest.username());
+        if (StringUtil.isValidEmail(loginRequest.email())){
+            currentUser = getOneByEmail(loginRequest.email());
         } else {
             throw new AuthException("Invalid username!");
         }
         if (passwordEncoder.matches(loginRequest.password(), currentUser.getPassword())){
-//        if (true){
-            return loadUserByUsername(currentUser.getUsername());
+            return getOneByEmail(currentUser.getUsername());
         } else{
             throw new AuthException("Invalid password!");
         }
