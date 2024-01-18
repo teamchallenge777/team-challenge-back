@@ -11,13 +11,11 @@ import team.challenge.MobileStore.repositories.BrandRepository;
 import team.challenge.MobileStore.repositories.CatalogueRepository;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @ChangeLog(order = "101")
 public class CatalogueMigration {
-
 
     @ChangeSet(order = "101", id = "add_catalogue", author = "Timur")
     public void addCatalogue(CatalogueRepository catalogueRepository, BrandRepository brandRepository) {
@@ -166,6 +164,29 @@ public class CatalogueMigration {
         SamsungGroup.getCatalogueGroupSpecifications().addAll(List.of(SamsungGalaxyS23Ultra, SamsungGalaxyS23Plus, SamsungGalaxyS23, SamsungGalaxyA53, SamsungGalaxyA13));
 
 
+        CatalogueGroup RedmiGroup = new CatalogueGroup();
+        RedmiGroup.setNameOfGroup("Redmi");
+        RedmiGroup.setHashtagsOfName(Map.of("catalogue", SmartphonesAndPhones.getId()));
+        RedmiGroup.setCatalogueGroupSpecifications(new ArrayList<>());
+
+        CatalogueGroupSpecification RedmiNote12Pro = new CatalogueGroupSpecification();
+        RedmiNote12Pro.setTitle("Redmi Note 12 Pro");
+        RedmiNote12Pro.setHashTagsOfTitle(Map.of("catalogue", SmartphonesAndPhones.getId(), "brand", findBrandIdByName(brands, "Redmi"), "series", "redmi note 12 pro"));
+
+        CatalogueGroupSpecification RedmiNote12 = new CatalogueGroupSpecification();
+        RedmiNote12.setTitle("Redmi Note 12");
+        RedmiNote12.setHashTagsOfTitle(Map.of("catalogue", SmartphonesAndPhones.getId(), "brand", findBrandIdByName(brands, "Redmi"), "series", "redmi note 12"));
+
+        CatalogueGroupSpecification RedmiNote11Pro = new CatalogueGroupSpecification();
+        RedmiNote11Pro.setTitle("Redmi Note 11 Pro");
+        RedmiNote11Pro.setHashTagsOfTitle(Map.of("catalogue", SmartphonesAndPhones.getId(), "brand", findBrandIdByName(brands, "Redmi"), "series", "redmi note 11 pro"));
+
+        CatalogueGroupSpecification RedmiNote10A = new CatalogueGroupSpecification();
+        RedmiNote10A.setTitle("Redmi Note 10A");
+        RedmiNote10A.setHashTagsOfTitle(Map.of("catalogue", SmartphonesAndPhones.getId(), "brand", findBrandIdByName(brands, "Redmi"), "series", "redmi note 10A"));
+
+        RedmiGroup.getCatalogueGroupSpecifications().addAll(List.of(RedmiNote12Pro, RedmiNote12, RedmiNote11Pro, RedmiNote10A));
+
         CatalogueGroup XiaomiGroup = new CatalogueGroup();
         XiaomiGroup.setNameOfGroup("Xiaomi");
         XiaomiGroup.setHashtagsOfName(Map.of("catalogue", SmartphonesAndPhones.getId()));
@@ -193,7 +214,30 @@ public class CatalogueMigration {
 
         XiaomiGroup.getCatalogueGroupSpecifications().addAll(List.of(Xiaomi13Lite, XiaomiPocoX5Pro5G, XiaomiPocoM5, XiaomiPocoM5s, Xiaomi11LiteNE));
 
-        SmartphonesAndPhones.getGroupSpecifications().addAll(List.of(SmartphonesGroup, AppleGroup, XiaomiGroup));
+        CatalogueGroup Accessories = new CatalogueGroup();
+        Accessories.setNameOfGroup("Accessories");
+        Accessories.setHashtagsOfName(Map.of("catalogue", SmartphonesAndPhones.getId()));
+        Accessories.setCatalogueGroupSpecifications(new ArrayList<>());
+
+        CatalogueGroupSpecification ScreenProtectorGlasses = new CatalogueGroupSpecification();
+        ScreenProtectorGlasses.setTitle("Screen Protector Glasses");
+        ScreenProtectorGlasses.setHashTagsOfTitle(Map.of("catalogue", SmartphonesAndPhones.getId(), "series", "screen protector glasses"));
+
+        CatalogueGroupSpecification Cases = new CatalogueGroupSpecification();
+        Cases.setTitle("Cases");
+        Cases.setHashTagsOfTitle(Map.of("catalogue", SmartphonesAndPhones.getId(), "series", "cases"));
+
+        CatalogueGroupSpecification Charges = new CatalogueGroupSpecification();
+        Charges.setTitle("Cases");
+        Charges.setHashTagsOfTitle(Map.of("catalogue", SmartphonesAndPhones.getId(), "series", "charges"));
+
+        CatalogueGroupSpecification MemoryCards = new CatalogueGroupSpecification();
+        MemoryCards.setTitle("MemoryCards");
+        MemoryCards.setHashTagsOfTitle(Map.of("catalogue", SmartphonesAndPhones.getId(), "series", "memory cards"));
+
+        Accessories.getCatalogueGroupSpecifications().addAll(List.of(ScreenProtectorGlasses, Cases, Charges, MemoryCards));
+
+        SmartphonesAndPhones.getGroupSpecifications().addAll(List.of(SmartphonesGroup, AppleGroup, RedmiGroup, XiaomiGroup, Accessories));
 
         Catalogue LaptopAndPCs = new Catalogue();
         LaptopAndPCs.setId(new ObjectId().toString());
