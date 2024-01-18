@@ -214,10 +214,10 @@ public class CatalogueMigration {
 
         XiaomiGroup.getCatalogueGroupSpecifications().addAll(List.of(Xiaomi13Lite, XiaomiPocoX5Pro5G, XiaomiPocoM5, XiaomiPocoM5s, Xiaomi11LiteNE));
 
-        CatalogueGroup Accessories = new CatalogueGroup();
-        Accessories.setNameOfGroup("Accessories");
-        Accessories.setHashtagsOfName(Map.of("catalogue", SmartphonesAndPhones.getId()));
-        Accessories.setCatalogueGroupSpecifications(new ArrayList<>());
+        CatalogueGroup AccessoriesGroup = new CatalogueGroup();
+        AccessoriesGroup.setNameOfGroup("Accessories");
+        AccessoriesGroup.setHashtagsOfName(Map.of("catalogue", SmartphonesAndPhones.getId()));
+        AccessoriesGroup.setCatalogueGroupSpecifications(new ArrayList<>());
 
         CatalogueGroupSpecification ScreenProtectorGlasses = new CatalogueGroupSpecification();
         ScreenProtectorGlasses.setTitle("Screen Protector Glasses");
@@ -235,9 +235,9 @@ public class CatalogueMigration {
         MemoryCards.setTitle("MemoryCards");
         MemoryCards.setHashTagsOfTitle(Map.of("catalogue", SmartphonesAndPhones.getId(), "series", "memory cards"));
 
-        Accessories.getCatalogueGroupSpecifications().addAll(List.of(ScreenProtectorGlasses, Cases, Charges, MemoryCards));
+        AccessoriesGroup.getCatalogueGroupSpecifications().addAll(List.of(ScreenProtectorGlasses, Cases, Charges, MemoryCards));
 
-        SmartphonesAndPhones.getGroupSpecifications().addAll(List.of(SmartphonesGroup, AppleGroup, RedmiGroup, XiaomiGroup, Accessories));
+        SmartphonesAndPhones.getGroupSpecifications().addAll(List.of(SmartphonesGroup, AppleGroup, RedmiGroup, XiaomiGroup, AccessoriesGroup));
 
         Catalogue LaptopAndPCs = new Catalogue();
         LaptopAndPCs.setId(new ObjectId().toString());
