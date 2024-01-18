@@ -1,4 +1,4 @@
-package team.challenge.MobileStore.dbmigration;
+package team.challenge.MobileStore.db.migration;
 
 import com.github.cloudyrock.mongock.ChangeLog;
 import com.github.cloudyrock.mongock.ChangeSet;

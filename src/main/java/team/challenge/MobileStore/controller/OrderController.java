@@ -17,6 +17,7 @@ import team.challenge.MobileStore.service.OrderService;
 import java.util.List;
 import java.util.Map;
 
+//api/v1/customers/{customer_id}/orders/
 @RestController
 @RequestMapping("api/v1/orders")
 @AllArgsConstructor
