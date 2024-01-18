@@ -31,10 +31,10 @@ public class AuthController {
     private final UserService userService;
     private final RoleMapper roleMapper;
     @PostMapping("/login")
-    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest login){
+    public ResponseEntity<?> login( @RequestBody LoginRequest login){
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        login.email(),
+                        login.username(),
                         login.password()
                 )
         );

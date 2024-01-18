@@ -20,6 +20,7 @@ import team.challenge.MobileStore.repositories.UserRepository;
 import team.challenge.MobileStore.service.UserService;
 import team.challenge.MobileStore.util.StringUtil;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 @Service
@@ -70,6 +71,9 @@ public class UserServiceImpl implements UserService  {
                     .password(hash)
                     .provider(AuthProvider.local)
                     .roles(Collections.singleton(roleUser))
+                    .isPhoneNumberConfirmed(false)
+                    .isPhoneNumberConfirmed(false)
+                    .creatingDate(LocalDateTime.now())
                     .build();
             return userRepository.save(newUser);
         }
@@ -88,8 +92,8 @@ public class UserServiceImpl implements UserService  {
     @Override
     public UserModel getOneByEmailAndPassword(@NonNull LoginRequest loginRequest) {
         UserModel currentUser;
-        if (StringUtil.isValidEmail(loginRequest.email())){
-            currentUser = getOneByEmail(loginRequest.email());
+        if (StringUtil.isValidEmail(loginRequest.username())){
+            currentUser = getOneByEmail(loginRequest.username());
         } else {
             throw new AuthException("Invalid username!");
         }

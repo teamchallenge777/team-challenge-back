@@ -1,15 +1,11 @@
 package team.challenge.MobileStore.dto;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
-public record LoginRequest(
-        @NotBlank(message = "Email must not be blank!")
-        @Pattern(regexp = "^[a-zA-Z][a-zA-Z0-9._%+-]{3,}$*@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$",
-                message = "Must be a valid e-mail address!")
-        String username,
+public record PasswordResetRequest(
+        String token,
 
         @NotBlank(message = "Password must not be blank!")
         @Pattern(regexp = ".*[!@#$%^&*()_+\\-=].*",

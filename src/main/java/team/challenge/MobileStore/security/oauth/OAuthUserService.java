@@ -17,6 +17,7 @@ import team.challenge.MobileStore.repositories.UserRepository;
 import team.challenge.MobileStore.security.oauth.user.OAuth2UserInfo;
 import team.challenge.MobileStore.security.oauth.user.OAuth2UserInfoFactory;
 
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Optional;
 
@@ -58,12 +59,16 @@ public class OAuthUserService extends DefaultOAuth2UserService {
 
 
     private UserModel registerNewUser(OAuth2UserRequest oAuth2UserRequest, OAuth2UserInfo oAuth2UserInfo){
-        RoleModel role = roleRepository.findByRoleName("USER").orElse(roleRepository.save(new RoleModel("USER")));
+        RoleModel roleUser = roleRepository.findByRoleName("USER").orElse(new RoleModel("USER"));
+        roleUser = roleRepository.save(roleUser);
         UserModel user = UserModel.builder()
                 .provider(AuthProvider.valueOf(oAuth2UserRequest.getClientRegistration().getRegistrationId()))
                 .email(oAuth2UserInfo.getEmail())
                 .attributes(oAuth2UserInfo.getAttributes())
-                .roles(Collections.singleton(role))
+                .roles(Collections.singleton(roleUser))
+                .isPhoneNumberConfirmed(false)
+                .isPhoneNumberConfirmed(false)
+                .creatingDate(LocalDateTime.now())
                 .build();
         return userRepository.save(user);
     }

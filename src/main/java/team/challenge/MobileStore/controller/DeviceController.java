@@ -67,11 +67,17 @@ public class DeviceController {
     @GetMapping()
     public Page<DeviceDtoShort> getAll(
             @RequestParam
-                    @Parameter(name = "params", examples = {@ExampleObject(name = "Map desc", value = "'key': 'value'", description = "Map structure."),
+                    @Parameter(name = "params", examples = {@ExampleObject(name = "Map desc", value = """
+                            {
+                                'key': 'value'
+                            }
+                            """, description = "Map structure."),
                     @ExampleObject(name = "Params example" , value = """
-                            'catalogue': 'catalogueId'
-                            'brand': 'brandId'
-                            'series': 'series value'""",
+                            {
+                                'catalogue': 'catalogueId'
+                                'brand': 'brandId'
+                                'series': 'series value'
+                            }""",
                     description = "Example with parameters.")},
                     description = "Parameters that are necessary for the operation of the catalog and filters for obtaining the desired list of devices. " +
                             "If you do not specify the parameters, you will receive all the devices that are in the database.",

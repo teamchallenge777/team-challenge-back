@@ -35,6 +35,9 @@ public class UserModel implements UserDetails, OAuth2User {
     private AuthProvider provider;
     private String customer;
     private Map<String, Object> attributes;
+    private boolean isEmailConfirmed;
+    private boolean isPhoneNumberConfirmed;
+    private LocalDateTime creatingDate;
 
     @Override
     public Map<String, Object> getAttributes() {
@@ -68,6 +71,7 @@ public class UserModel implements UserDetails, OAuth2User {
 
     @Override
     public boolean isEnabled() {
+//        return isEmailConfirmed || isPhoneNumberConfirmed;
         return true;
     }
 
