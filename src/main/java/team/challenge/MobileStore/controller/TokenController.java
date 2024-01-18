@@ -15,10 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 import team.challenge.MobileStore.dto.PasswordResetRequest;
 import team.challenge.MobileStore.model.UserModel;
 import team.challenge.MobileStore.model.VerificationToken;
-import team.challenge.MobileStore.service.MailSenderService;
-import team.challenge.MobileStore.service.PasswordVerificationTokenService;
-import team.challenge.MobileStore.service.UserService;
-import team.challenge.MobileStore.service.EmailVerificationTokenService;
+import team.challenge.MobileStore.service.*;
+
 @Tag(name = "Token endpoints", description = "HTTP methods for creating email verification and password reset tokens and verify them.")
 @RestController
 @RequestMapping("/api/v1/token")
@@ -27,7 +25,9 @@ public class TokenController {
     private final UserService userService;
     private final EmailVerificationTokenService emailVerificationTokenService;
     private final PasswordVerificationTokenService passwordVerificationTokenService;
+    private final PhoneVerificationTokenService phoneVerificationTokenService;
     private final MailSenderService mailSenderService;
+    private final SmsSenderService smsSenderService;
 
     @PostMapping("/mail/create")
     @PreAuthorize("authentication.principal.username == #email")
@@ -67,4 +67,15 @@ public class TokenController {
         String[] tokenPlusId = passwordResetRequest.token().split("\\+");
         return ResponseEntity.ok(passwordVerificationTokenService.verifyToken(tokenPlusId[0], tokenPlusId[1], passwordResetRequest.password()));
     }
+    @PostMapping("/phone-number/create")
+    public ResponseEntity<?> createPhoneToken(@RequestBody String phoneNumber){
+        UserModel user = userService.getOneByPhoneNumber(phoneNumber);
+        VerificationToken verificationToken = phoneVerificationTokenService.createToken(user);
+        String verifyToken = verificationToken.getToken() + "+" + user.getId();
+        String text = "To verify your phone number go to https://electronic-heaven.netlify.app/verify-hpone-number?token=" + verifyToken;
+        smsSenderService.sendSms(phoneNumber, text);
+        return ResponseEntity.ok("SMS was send!");
+
+    }
+//    @PostMapping("/phone-number/verify")
 }

@@ -1,5 +1,5 @@
 package team.challenge.MobileStore.model;
 
 public enum VerificationTokenType {
-    EMAIL, PASSWORD
+    EMAIL, PASSWORD, PHONE
 }
