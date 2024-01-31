@@ -18,6 +18,7 @@ import team.challenge.MobileStore.service.BrandService;
 import team.challenge.MobileStore.service.CatalogueService;
 import team.challenge.MobileStore.service.DeviceService;
 
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -125,12 +126,53 @@ public class DeviceServiceImpl implements DeviceService {
 
     @Override
     public Device create(@NonNull DeviceRequest deviceRequest) {
-        return null;
+        Brand brand = brandService.getOneById(deviceRequest.brandId());
+        Catalogue catalogue = catalogueService.findById(deviceRequest.catalogueId());
+        Device device = Device.builder()
+                .id(new ObjectId().toString())
+                .brand(brand)
+                .catalogue(catalogue)
+                .uriMainPhoto(deviceRequest.uriMainPhoto())
+                .uriPhotos(deviceRequest.photosUri())
+                .price(deviceRequest.price())
+                .discount(deviceRequest.discount())
+                .skuCode(deviceRequest.skuCode())
+                .presentations(deviceRequest.presentation())
+                .specificationGroups(deviceRequest.specificationGroups())
+                .isLeader(deviceRequest.isLeader())
+                .creatingDate(LocalDateTime.now())
+                .build();
+        String deviceId= device.getId();
+        List<Review> reviews = new ArrayList<>();
+        List<Question> questions = new ArrayList<>();
+        String memory = device.getSpecificationValue("internal memory");
+        List<Device> sameDevices = getAllWithSameMemory(device.getId(), memory).stream()
+                .filter(d -> !d.getId().equals(deviceId)).toList();
+        if (sameDevices.size() != 0){
+            reviews = sameDevices.get(0).getReviews();
+            questions = sameDevices.get(0).getQuestions();
+        }
+        device.setReviews(reviews);
+        device.setQuestions(questions);
+        return deviceRepository.save(device);
     }
 
     @Override
     public Device update(@NonNull String deviceId, @NonNull DeviceRequest deviceRequest) {
-        return null;
+        Device deviceFromDb = getOne(deviceId);
+        Brand brand = brandService.getOneById(deviceRequest.brandId());
+        Catalogue catalogue = catalogueService.findById(deviceRequest.catalogueId());
+        deviceFromDb.setUriMainPhoto(deviceRequest.uriMainPhoto());
+        deviceFromDb.setCatalogue(catalogue);
+        deviceFromDb.setBrand(brand);
+        deviceFromDb.setSkuCode(deviceRequest.skuCode());
+        deviceFromDb.setPrice(deviceRequest.price());
+        deviceFromDb.setDiscount(deviceRequest.discount());
+        deviceFromDb.setUriPhotos(deviceRequest.photosUri());
+        deviceFromDb.setPresentations(deviceRequest.presentation());
+        deviceFromDb.setSpecificationGroups(deviceRequest.specificationGroups());
+        deviceFromDb.setIsLeader(deviceRequest.isLeader());
+        return deviceRepository.save(deviceFromDb);
     }
 
     @Override
