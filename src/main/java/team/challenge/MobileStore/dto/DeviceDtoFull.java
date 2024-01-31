@@ -10,6 +10,7 @@ public record DeviceDtoFull(
         String title,
         Integer price,
         Integer discount,
+        ReviewMarkDto review,
         List<SameDeviceDto> sameDevices,
         List<SameDeviceDto> sameMemories,
         List<String> photoUris,

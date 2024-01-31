@@ -35,10 +35,12 @@ public class DeviceMapperImpl implements DeviceMapper {
         String title = getTitle(device);
         List<Device> deviceServiceAllWithSameColor = deviceService.getAllWithSameColor(device.getId(), findInSpecification(device, COLOR));
         List<Device> devicesWithSameMemory = deviceService.getAllWithSameMemory(device.getId(), findInSpecification(device, MEMORY));
+        List<Review> reviews = reviewService.getAllByDevice(device.getId());
         return new DeviceDtoFull(device.getId(),
                 title,
                 device.getPrice(),
                 device.getDiscount(),
+                reviewMapper.mapToReviewMarkDto(reviews),
                 mapToSameDeviceMemoryDtoList(deviceServiceAllWithSameColor),
                 mapToSameDeviceColorDtoList(devicesWithSameMemory),
                 device.getUriPhotos(),
