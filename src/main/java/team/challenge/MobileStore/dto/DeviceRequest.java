@@ -7,14 +7,16 @@ import team.challenge.MobileStore.model.SpecificationGroup;
 import java.util.List;
 
 public record DeviceRequest(
+         String uriMainPhoto,
         List<String> photosUri,
         Integer price,
         Integer discount,
         String skuCode,
         List<DevicePresentation> presentation,
         List<SpecificationGroup> specificationGroups,
-        Brand brand,
-        Catalogue catalogue
+        String brandId,
+        String catalogueId,
+        boolean isLeader
 
 ) {
 }
